@@ -1,0 +1,67 @@
+version: "4.1"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: challenge_database
+    restart: always
+    environment:
+      POSTGRES_DB: challenge
+      POSTGRES_USER: ROOT
+      POSTGRES_PASSWORD: PASSWORD
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  prisma-studio:
+    container_name: prisma-studio
+    image: timothyjmiller/prisma-studio:latest
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      POSTGRES_URL: "postgresql://ROOT:PASSWORD@postgres:5432/challenge?schema=public"
+      POSTGRES_DATABASE: development
+      POSTGRES_HOST: postgres
+      POSTGRES_USERNAME: ROOT
+      POSTGRES_PASSWORD: PASSWORD
+      POSTGRES_PORT: 5432
+    ports:
+      - 5555:5555
+    depends_on:
+      - postgres
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: challenge_backend
+    restart: always
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: "postgresql://ROOT:PASSWORD@postgres:5432/challenge?schema=public"
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: challenge_frontend
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: challenge
+  #     POSTGRES_USER: challenge_user
+  #     POSTGRES_PASSWORD: sua_senha_segura
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - postgres
+
+volumes:
+  postgres_data:
+networks:
+  default:
+    driver: bridge
