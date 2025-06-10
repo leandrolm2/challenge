@@ -1,1 +1,10 @@
 
+:host {
+  display: block;
+  width: 100%;
+}
+
+input, .mat-input-element {
+  width: 100%;
+  box-sizing: border-box;
+}
