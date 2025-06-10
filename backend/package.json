@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "prisma": {
-    "seed": "npx prisma generate && node --require esbuild-register prisma/seed.js"
+    "seed": "npx prisma generate && node prisma/seed.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch 'src/**/*.ts' --exec tsx src/index.ts",
     "build": "npx tsc",
-    "start": "node build/index.js"
+    "prestart": "npx prisma migrate deploy",
+    "start": "npx prisma db seed && node build/index.js"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +30,6 @@
     "express": "^5.1.0",
     "install": "^0.13.0",
     "nodemon": "^3.1.10",
-    "npm": "^11.4.1",
     "prisma": "^6.9.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"

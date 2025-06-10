@@ -1,18 +1,31 @@
-const { PrismaClient } = requiire('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
+console.log("oi")
+
 async function main() {
-  const user = await prisma.user.create({
-    data: {
-      name: 'Leandro',
-      email: 'leandro@example.com'
-    }
+  const user = await prisma.user.upsert({
+    create: {
+      email: "leandro@example.com",
+      password: "12345",
+    },
+    update: {
+      email: "leandro@example.com",
+      password: "12345",
+    },
+    where: {
+      email: "leandro@example.com",
+    },
   });
-  console.log('user', user)
+
+  return user;
 }
 
 main()
+  .then((user) => {
+    console.log("user", user);
+  })
   .catch((e) => {
     console.error(e);
   })
