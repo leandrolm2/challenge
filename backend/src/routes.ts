@@ -1,29 +1,70 @@
 import { Router, Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
 
 const router = Router();
-const prisma = new PrismaClient();
 
-router.post('/register', async (req, res) => {
-  const { email, password } = {email: 'user@email', password: 'userpassword'}
+// Mock de usuários permitidos
+const allowedUsers = [
+  { id: '1', email: 'admin@example.com', password: 'admin' },
+  { id: '2', email: 'leandro@example.com', password: '123456' }
+];
 
-  // Validação simples
+// Cadastro de usuário simulado
+router.post('/singup', async (req: Request, res: Response): Promise<void> => {
+  console.log(req.body)
+  const { email, password } = req.body;
+
   if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required.' });
+    res.status(400).json({ error: 'Email and password are required.' });
+    return;
   }
 
-  try {
-    const user = await prisma.user.create({
-      data: { email, password }
-    });
-    
-    res.status(201).json({ id: user.id, email: user.email });
-  } catch (error: any) {
-    if (error.code === 'P2002') { // Unique constraint failed
-      return res.status(409).json({ error: 'Email already exists.' });
-    }
-    res.status(500).json({ error: 'Internal server error.' });
+  // Verifica se já existe
+  const exists = allowedUsers.find(u => u.email === email);
+  if (exists) {
+    res.status(409).json({ error: 'Email already exists.' });
+    return;
   }
+
+  // Adiciona ao array (mock)
+  const newUser = { id: String(allowedUsers.length + 1), email, password };
+  allowedUsers.push(newUser);
+
+  res.status(201).json({ id: newUser.id, email: newUser.email });
+  return;
+});
+
+// Login simulado
+router.post('/login', async (req: Request, res: Response): Promise<void> => {
+  const { name, password } = req.body;
+
+  if (!name || !password) {
+    res.status(400).json({ error: 'Name and password are required.' });
+    return;
+  }
+
+  // Busca no array mock
+  const user = allowedUsers.find(u => u.email === name && u.password === password);
+
+  if (!user) {
+    // Retorna erro, mas sempre como JSON
+    res.status(401).json({ error: 'Invalid credentials.' });
+    return;
+  }
+
+  // Simula um token
+  const token = 'fake-jwt-token';
+
+  // Retorno compatível com LoginResponse esperado pelo Angular
+  res.json({
+    token,
+    name: user.email
+  });
+  return;
+});
+
+// Health check
+router.get('/ping', (_req: Request, res: Response): void => {
+  res.send({ alo: 'pong' });
 });
 
 export default router;
