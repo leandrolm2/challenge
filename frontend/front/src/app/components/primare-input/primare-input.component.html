@@ -1,0 +1,13 @@
+<div class="input-wrapper">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ label }}</mat-label>
+      <input
+        matInput
+        [type]="type"
+        [placeholder]="placeholder"
+        [value]="value"
+        (input)="onInput($event)"
+        [id]="inputName"
+      />
+    </mat-form-field>
+</div>
