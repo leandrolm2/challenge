@@ -4,9 +4,9 @@
     <h2>{{ title }}</h2>
     <ng-content></ng-content>
     <div class="button-group">
-      <button mat-flat-button>{{ primaryButtonText }}</button>
+      <button mat-flat-button (click)="submit()">{{ primaryButtonText }}</button>
       <span>or</span>
-      <button mat-stroked-button color="primary">{{ secondaryButtonText }}</button>
+      <button mat-stroked-button color="primary" (click)="navigate()">{{ secondaryButtonText }}</button>
     </div>
   </section>
   <section class="main-section">
