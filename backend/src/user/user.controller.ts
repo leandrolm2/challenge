@@ -10,9 +10,9 @@ export class UserController {
   constructor(userService: UserService) {
     this.userService = userService;
 
-      this.login = this.login.bind(this);
-      this.singup = this.singup.bind(this);
-      this.ping = this.ping.bind(this);
+    this.login = this.login.bind(this);
+    this.singup = this.singup.bind(this);
+    this.ping = this.ping.bind(this);
   }
 
   async singup(req: Request, res: Response): Promise<void> {
@@ -76,7 +76,7 @@ export class UserController {
 
   async ping(_req: Request, res: Response): Promise<void> {
     try {
-      const users = await this.userService.findMany();
+      const users: PublicUser[] | null = await this.userService.findMany();
       if (!users) {
         res.status(400).json({ error: "something whent wrogn" });
         return;

@@ -7,6 +7,10 @@ export class UserService {
   async createUser(email: string, password: string): Promise<PublicUser | null> {
     return prisma.user.create({
       data: { email, password },
+      select: {
+        id: true,
+        email: true
+      }
     });
   }
 
@@ -19,11 +23,20 @@ export class UserService {
   async findById(id: string): Promise<PublicUser | null> {
     return prisma.user.findUnique({
       where: { id },
+      select: {
+        id: true,
+        email: true
+      }
     });
   }
 
-  async findMany(): Promise<PublicUser[] | User[]> {
-    return prisma.user.findMany();
+  async findMany(): Promise<PublicUser[] | User[] | null> {
+    return prisma.user.findMany({
+      select: {
+        id: true,
+        email: true
+      }
+    });
   }
 }
 
