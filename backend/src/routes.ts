@@ -5,6 +5,6 @@ import tasks from "./tasks/tasks.routes"
 const router = Router();
 
 router.use("/auth", user);
-router.use("/todos", tasks);
+router.use("/tasks", tasks);
 
 export default router;

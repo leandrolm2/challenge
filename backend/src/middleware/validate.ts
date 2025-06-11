@@ -16,7 +16,7 @@ export function validateDTO(dtoClass: any) {
       return res.status(400).json({ errors: formattedErrors });
     }
 
-    req.body = dto; // já tipado e validado
+    req.body = dto;
     next();
   };
 }
