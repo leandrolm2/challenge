@@ -2,7 +2,8 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 dotenv.config();
-import hello from './routes';
+import routes from './routes';
+
 if (!process.env.PORT) {
   throw new Error('PORT is not defined');
 }
@@ -13,7 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(hello);
+app.use(routes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
