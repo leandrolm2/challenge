@@ -6,10 +6,10 @@
     "seed": "npx prisma generate && node prisma/seed.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch 'src/**/*.ts' --exec tsx src/index.ts",
     "build": "npx tsc",
-    "start": "node build/index.js"
+    "prestart": "npx prisma migrate deploy",
+    "start": "npx prisma db seed && node build/index.js"
   },
   "keywords": [],
   "author": "",
@@ -17,20 +17,27 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.9.0",
+    "bcryptjs": "^3.0.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "cors": "^2.8.5",
-    "express-validator": "^7.2.1"
+    "express-async-handler": "^1.2.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.18",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.30",
     "dotenv": "^16.5.0",
     "esbuild-register": "^3.6.0",
     "express": "^5.1.0",
     "install": "^0.13.0",
     "nodemon": "^3.1.10",
-    "npm": "^11.4.1",
     "prisma": "^6.9.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"

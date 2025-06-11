@@ -13,8 +13,6 @@ COPY tsconfig.json ./
 
 RUN npm run build
 
-RUN npx prisma db seed
-
 EXPOSE 4000
 
 CMD ["npm", "run", "start"]
