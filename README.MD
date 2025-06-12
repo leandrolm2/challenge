@@ -89,6 +89,34 @@ This command will:
 
 ---
 
+---
+
+### 4. (Optional) Seed the Database
+
+After building the Docker container, you can populate the database with sample data by running:
+
+```bash
+npx prisma generate && node prisma/seed.js
+```
+
+This command will:
+
+* Generate the Prisma client
+* Insert a test user with pre-defined tasks into the database
+
+#### Sample credentials created:
+
+```
+Email:    leandro@example.com  
+Password: 123456
+```
+
+> 💡 You can use these credentials to log in and explore the application immediately.
+
+---
+
+## 📬 API Endpoints
+
 ## 📬 API Endpoints
 
 ### Authentication

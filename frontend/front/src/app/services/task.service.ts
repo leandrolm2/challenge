@@ -24,7 +24,6 @@ export class TaskService {
 getTasks(filters: any = {}): Observable<any> {
   const token = sessionStorage.getItem('auth-token');
   const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-
   let params = new HttpParams();
 
   for (const key in filters) {

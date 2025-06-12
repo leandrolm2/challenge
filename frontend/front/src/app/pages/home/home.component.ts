@@ -49,9 +49,14 @@ export class HomeComponent implements OnInit {
   loadTasks() {
     this.isLoading = true;
 
+    let completed: boolean | undefined;
+    if (this.taskFilter === 'completed') completed = true;
+    if (this.taskFilter === 'incomplete') completed = false;
+
     this.taskService.getTasks({
       page: this.currentPage,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
+      completed
     }).subscribe({
       next: (response) => {
         this.tasks = (response.data || []).map((task: any) => ({ ...task, editing: false }));
@@ -60,6 +65,11 @@ export class HomeComponent implements OnInit {
       error: () => this.toastr.error('Failed to load tasks.'),
       complete: () => (this.isLoading = false),
     });
+  }
+
+  onFilterChange() {
+    this.currentPage = 1;
+    this.loadTasks();
   }
 
   addTask() {
@@ -85,7 +95,6 @@ export class HomeComponent implements OnInit {
         this.toastr.success('Task added successfully.');
         this.newTitle = '';
         this.newDescription = '';
-
         this.loadTasks();
       },
       error: () => this.toastr.error('Failed to add task.'),
@@ -109,9 +118,9 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    const {title, description, completed} = task
+    const { title, description, completed } = task;
 
-    this.taskService.updateTask(task.id, {title, description, completed}).subscribe({
+    this.taskService.updateTask(task.id, { title, description, completed }).subscribe({
       next: () => {
         task.editing = false;
         this.toastr.success('Task updated.');

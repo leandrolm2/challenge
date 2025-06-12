@@ -1,9 +1,15 @@
 <h1>Task List</h1>
 
-<mat-button-toggle-group [(ngModel)]="taskFilter" aria-label="Task filter" class="filter-toggle" exclusive>
-  <mat-button-toggle value="all">Todas</mat-button-toggle>
-  <mat-button-toggle value="completed">Completas</mat-button-toggle>
-  <mat-button-toggle value="incomplete">Incompletas</mat-button-toggle>
+<mat-button-toggle-group
+  [(ngModel)]="taskFilter"
+  (ngModelChange)="onFilterChange()"
+  aria-label="Task filter"
+  class="filter-toggle"
+  exclusive
+>
+  <mat-button-toggle value="all">All</mat-button-toggle>
+  <mat-button-toggle value="completed">Completed</mat-button-toggle>
+  <mat-button-toggle value="incomplete">Incompleted</mat-button-toggle>
 </mat-button-toggle-group>
 
 <div *ngIf="errorMessage" class="error-message">
@@ -50,4 +56,5 @@
   [pageSize]="pageSize"
   (page)="onPageChange($event)">
 </mat-paginator>
+
 
