@@ -2,8 +2,6 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-console.log("oi")
-
 async function main() {
   const user = await prisma.user.upsert({
     create: {
