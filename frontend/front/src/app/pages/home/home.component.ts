@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   newDescription = '';
   isLoading = false;
   errorMessage = '';
+  taskFilter: 'all' | 'completed' | 'incomplete' = 'all';
 
   constructor(
     private taskService: TaskService,
@@ -134,8 +135,6 @@ export class HomeComponent implements OnInit {
   formatDate(date: string | Date): string {
     return new Date(date).toLocaleString();
   }
-
-  taskFilter: 'all' | 'completed' | 'incomplete' = 'all';
 
   filteredTasks() {
     switch (this.taskFilter) {
