@@ -21,13 +21,26 @@ export class TaskService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getTasks(): Observable<Task[]> {
-    const token = sessionStorage.getItem('auth-token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    const params = new HttpParams().set('userId', this.authService.getUserId() as string);
+getTasks(filters: any = {}): Observable<any> {
+  const token = sessionStorage.getItem('auth-token');
+  const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-    return this.http.get<Task[]>(this.baseUrl, { headers, params });
+  let params = new HttpParams();
+
+  for (const key in filters) {
+    if (filters[key] !== undefined && filters[key] !== '') {
+      params = params.set(key, filters[key]);
+    }
   }
+
+  const userId = this.authService.getUserId();
+  if (userId) {
+    params = params.set('userId', userId);
+  }
+
+  return this.http.get<any>(this.baseUrl, { headers, params });
+}
+
 
   addTask(task: Partial<Task>): Observable<Task> {
     const token = sessionStorage.getItem('auth-token');

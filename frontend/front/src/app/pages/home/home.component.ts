@@ -5,6 +5,7 @@ import { TaskService } from '../../services/task.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../auth/auth.service';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 interface Task {
   id: number;
@@ -19,7 +20,7 @@ interface Task {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatButtonToggleModule, FormsModule],
+  imports: [CommonModule, MatButtonToggleModule, FormsModule, MatPaginatorModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -31,6 +32,9 @@ export class HomeComponent implements OnInit {
   isLoading = false;
   errorMessage = '';
   taskFilter: 'all' | 'completed' | 'incomplete' = 'all';
+  currentPage = 1;
+  pageSize = 3;
+  totalCount = 0;
 
   constructor(
     private taskService: TaskService,
@@ -44,9 +48,14 @@ export class HomeComponent implements OnInit {
 
   loadTasks() {
     this.isLoading = true;
-    this.taskService.getTasks().subscribe({
-      next: (response: any) => {
+
+    this.taskService.getTasks({
+      page: this.currentPage,
+      pageSize: this.pageSize
+    }).subscribe({
+      next: (response) => {
         this.tasks = (response.data || []).map((task: any) => ({ ...task, editing: false }));
+        this.totalCount = response.totalCount ?? 0;
       },
       error: () => this.toastr.error('Failed to load tasks.'),
       complete: () => (this.isLoading = false),
@@ -73,9 +82,9 @@ export class HomeComponent implements OnInit {
     this.taskService.addTask(newTask).subscribe({
       next: (createdTask) => {
         this.tasks.push({ ...createdTask, editing: false });
+        this.toastr.success('Task added successfully.');
         this.newTitle = '';
         this.newDescription = '';
-        this.toastr.success('Task added successfully.');
 
         this.loadTasks();
       },
@@ -139,7 +148,6 @@ export class HomeComponent implements OnInit {
   filteredTasks() {
     switch (this.taskFilter) {
       case 'completed':
-        console.log('aloooo')
         return this.tasks.filter(task => task.completed);
       case 'incomplete':
         return this.tasks.filter(task => !task.completed);
@@ -148,4 +156,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.loadTasks();
+  }
 }

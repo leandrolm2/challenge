@@ -6,6 +6,7 @@ export type Task = {
   userId: string;
   createdAt: Date;
   updatedAt: Date;
+  totalCount?: number;
 };
 
 export type PublicTask = Omit<Task, "updatedAt" | "userId">;

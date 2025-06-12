@@ -4,4 +4,5 @@ export type QueryListTask = {
   completed?: boolean;
   userId: string;
   createdAt?: Date | string;
+  page?: number
 };
