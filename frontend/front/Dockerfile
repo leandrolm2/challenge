@@ -5,7 +5,8 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
-RUN npm install @angular/cli -g
+
+RUN npm install -g @angular/cli@latest
 
 EXPOSE 4200
 

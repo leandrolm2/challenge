@@ -52,7 +52,7 @@ export class UserController {
       const userResult = await this.userService.findByEmail(email);
 
       if (!userResult) {
-        res.status(401).json({ message: "Invalid credentials" });
+        res.status(401).json({ error: "Invalid credentials" });
         return;
       }
 
