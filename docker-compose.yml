@@ -60,20 +60,21 @@ services:
     networks:
       - challange-network
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: challenge_frontend
-  #   restart: always
-  #   environment:
-  #     POSTGRES_DB: challenge
-  #     POSTGRES_USER: challenge_user
-  #     POSTGRES_PASSWORD: sua_senha_segura
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - postgres
+  frontend:
+    build:
+      context: ./frontend/front
+      dockerfile: Dockerfile
+    container_name: challenge_frontend
+    restart: unless-stopped
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    networks:
+      - challange-network
+    volumes:
+      - ./frontend/front:/app
+      - /app/node_modules
 
 volumes:
   postgres_data:

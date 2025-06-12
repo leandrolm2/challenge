@@ -83,6 +83,11 @@ li {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
+
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
   }
 
   small {

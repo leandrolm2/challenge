@@ -19,26 +19,29 @@
 </div>
 
 <ul>
-<li *ngFor="let task of filteredTasks()" [class.completed]="task.completed">
-  <div class="task-checkbox">
-    <input
-      type="checkbox"
-      [checked]="task.completed"
-      (change)="onToggleAttempt(task)"
-    />
-  </div>
+  <li *ngFor="let task of filteredTasks()" [class.completed]="task.completed">
+    <div class="task-checkbox">
+      <input
+        type="checkbox"
+        [checked]="task.completed"
+        (change)="onToggleAttempt(task)"
+      />
+    </div>
 
-  <span *ngIf="!task.editing">
-    <strong>{{ task.title }}</strong> - <span>{{ task.description }}</span><br />
-    <small><em>Created at: {{ formatDate(task.createdAt) }}</em></small><br />
-    <button (click)="editTask(task)">Edit</button>
-    <button (click)="deleteTask(task.id)">Delete</button>
-  </span>
+    <div class="task-content">
+      <span *ngIf="!task.editing">
+        <strong>{{ task.title }}</strong> - <span>{{ task.description }}</span><br />
+        <small><em>Created at: {{ formatDate(task.createdAt) }}</em></small><br />
+        <button (click)="editTask(task)">Edit</button>
+        <button (click)="deleteTask(task.id)">Delete</button>
+      </span>
 
-  <span *ngIf="task.editing">
-    <input [(ngModel)]="task.title" />
-    <input [(ngModel)]="task.description" />
-    <button (click)="updateTask(task)">Save</button>
-  </span>
-</li>
+      <span *ngIf="task.editing">
+        <input [(ngModel)]="task.title" />
+        <input [(ngModel)]="task.description" />
+        <button (click)="updateTask(task)">Save</button>
+      </span>
+    </div>
+  </li>
 </ul>
+
