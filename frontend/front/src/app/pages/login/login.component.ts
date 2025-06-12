@@ -52,12 +52,12 @@ export class LoginComponent {
     this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
       next: () => this.router.navigate(["home"]),
       error: (err) => {
-        if (err?.error?.errors) {
+        if (err?.error?.errors?.length) {
           err.error?.errors?.map((arr: any) => {
             this.toastService.error(arr.errors[0]);
           });
         } else {
-          const errorMsg = err?.error?.message || "Unexpected error! Please try again later.";
+          const errorMsg = err?.error?.error || "Unexpected error! Please try again later.";
           this.toastService.error(errorMsg);
         }
       }

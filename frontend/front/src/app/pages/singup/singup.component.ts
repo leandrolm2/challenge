@@ -58,7 +58,16 @@ export class SignUpComponent {
         this.toastService.success("Registration successful! Please log in to continue.");
         this.router.navigate(["/login"]);
       },
-      error: () => this.toastService.error("Unexpected error! Please try again later.")
+      error: (err) => {
+        if (err?.error?.errors?.length) {
+          err.error?.errors?.map((arr: any) => {
+            this.toastService.error(arr.errors[0]);
+          });
+        } else {
+          const errorMsg = err?.error?.error || "Unexpected error! Please try again later.";
+          this.toastService.error(errorMsg);
+        }
+      }
     });
   }
 

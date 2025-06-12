@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit {
   deleteTask(id: number) {
     this.taskService.deleteTask(id).subscribe({
       next: () => {
-        this.tasks = this.tasks.filter(t => t.id !== id);
+        this.loadTasks();
         this.toastr.success('Task deleted.');
       },
       error: () => this.toastr.error('Failed to delete task.'),
