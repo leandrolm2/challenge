@@ -45,3 +45,9 @@
   </li>
 </ul>
 
+<mat-paginator
+  [length]="totalCount"
+  [pageSize]="pageSize"
+  (page)="onPageChange($event)">
+</mat-paginator>
+

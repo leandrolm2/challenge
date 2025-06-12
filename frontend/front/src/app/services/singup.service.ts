@@ -13,7 +13,6 @@ export class SingupService {
   constructor(private httpClient: HttpClient) { }
 
   singup(email: string, password: string){
-    console.log({email, password})
     return this.httpClient.post<LoginResponse>(`${this.baseUrl}/register`, { password, email }).pipe(
       tap((value) => {
         return value

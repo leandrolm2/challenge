@@ -17,7 +17,7 @@ export class TasksService {
     });
   }
 
-  async listTasks(filters?: QueryListTask): Promise<PublicTask[]> {
+  async listTasks(filters?: QueryListTask & { page?: number; pageSize?: number }): Promise<{ tasks: PublicTask[]; totalCount: number }> {
     const where: any = {};
 
     if (filters) {
@@ -27,6 +27,8 @@ export class TasksService {
         completed,
         userId,
         createdAt,
+        page = 1,
+        pageSize = 3,
       } = filters;
 
       if (title) {
@@ -56,9 +58,35 @@ export class TasksService {
           };
         }
       }
+
+      const skip = (page - 1) * pageSize;
+
+      const [tasks, totalCount] = await Promise.all([
+        prisma.task.findMany({
+          where,
+          select,
+          skip,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+        }),
+        prisma.task.count({ where })
+      ]);
+
+      return { tasks, totalCount };
     }
 
-    return prisma.task.findMany({ where, select });
+    // fallback
+    const [tasks, totalCount] = await Promise.all([
+      prisma.task.findMany({
+        where,
+        select,
+        orderBy: { createdAt: 'desc' },
+        skip: 0,
+        take: 3,
+      }),
+      prisma.task.count({ where })
+    ]);
+    return { tasks, totalCount };
   }
 
   async getTaskById(id: string): Promise<PublicTask | null> {

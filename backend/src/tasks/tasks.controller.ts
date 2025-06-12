@@ -42,7 +42,7 @@ export class TasksController {
 
   async list(req: Request, res: Response): Promise<void> {
     try {
-      const { title, description, completed, userId, createdAt } = req.query;
+      const { title, description, completed, userId, createdAt, page } = req.query;
 
       if (!userId || typeof userId !== "string") {
         res.status(400).json({ error: "userId is required in query parameters." });
@@ -55,11 +55,12 @@ export class TasksController {
         completed: typeof completed === "string" ? completed === "true" : undefined,
         userId,
         createdAt: createdAt ? new Date(createdAt as string) : undefined,
+        page: page ? Number(page) : 1
       };
 
-      const tasks = await tasksService.listTasks(payload);
+      const {tasks, totalCount}: { tasks: PublicTask[]; totalCount: number } = await tasksService.listTasks(payload);
 
-      res.status(200).json({ message: "Success", data: tasks });
+      res.status(200).json({ message: "Success", data: tasks, totalCount });
       return;
     } catch (error: any) {
       res.status(500).json({ error: "Failed to retrieve tasks.", message: error });
