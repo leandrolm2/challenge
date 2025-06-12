@@ -35,7 +35,7 @@ export class TasksController {
       res.status(201).json({ message: "Task created successfully.", data: task });
       return;
     } catch (error: any) {
-      res.status(500).json({ error: "Failed to create task.", message: error.message });
+      res.status(500).json({ error: "Failed to create task.", message: error });
       return;
     }
   }
@@ -62,7 +62,7 @@ export class TasksController {
       res.status(200).json({ message: "Success", data: tasks });
       return;
     } catch (error: any) {
-      res.status(500).json({ error: "Failed to retrieve tasks.", message: error.message });
+      res.status(500).json({ error: "Failed to retrieve tasks.", message: error });
       return;
     }
   }
@@ -84,7 +84,7 @@ export class TasksController {
       res.status(200).json({ message: "Success.", data: task });
       return;
     } catch (error: any) {
-      res.status(500).json({ error: "Failed to retrieve task.", message: error.message });
+      res.status(500).json({ error: "Failed to retrieve task.", message: error });
       return;
     }
   }
@@ -99,7 +99,7 @@ export class TasksController {
       res.status(200).json({ message: "Task updated successfully.", data: updatedTask });
       return;
     } catch (error: any) {
-      res.status(500).json({ error: "Failed to update task.", message: error.message });
+      res.status(500).json({ error: "Failed to update task.", message: error });
       return;
     }
   }
@@ -113,7 +113,7 @@ export class TasksController {
       res.status(200).json({ message: "Task deleted successfully." });
       return;
     } catch (error: any) {
-      res.status(500).json({ error: "Failed to delete task.", message: error.message });
+      res.status(500).json({ error: "Failed to delete task.", message: error });
       return;
     }
   }
