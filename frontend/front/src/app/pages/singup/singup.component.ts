@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { DefaultLoginLayoutComponent } from '../../components/default-login-layout/default-login-layout.component';
-import { FormControl, FormGroup, FormRecord, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PrimaryInputComponent } from '../../components/primare-input/primare-input.component';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { SingupService } from '../../services/singup.service';
+import isTokenExpired from '../../auth/auth.isTokenExpired';
 
 interface SignupForm {
   name: FormControl,
@@ -44,11 +44,22 @@ export class SignUpComponent {
     })
   }
 
-  submit(){
-    this.singupService.singup(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.name).subscribe({
-      next: () => this.toastService.success("Login feito com sucesso!"),
-      error: () => this.toastService.error("Erro inesperado! Tente novamente mais tarde")
-    })
+  ngOnInit(): void {
+    const token = sessionStorage.getItem('auth-token');
+
+    if (token && !isTokenExpired(token)) {
+      this.router.navigate(['/home']);
+    }
+  }
+
+  submit() {
+    this.singupService.singup(this.signupForm.value.email, this.signupForm.value.password).subscribe({
+      next: () => {
+        this.toastService.success("Registration successful! Please log in to continue.");
+        this.router.navigate(["/login"]);
+      },
+      error: () => this.toastService.error("Unexpected error! Please try again later.")
+    });
   }
 
   navigate(){

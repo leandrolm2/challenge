@@ -5,6 +5,7 @@ import { PrimaryInputComponent } from '../../components/primare-input/primare-in
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { ToastrService } from 'ngx-toastr';
+import isTokenExpired from "../../auth/auth.isTokenExpired"
 
 interface LoginForm {
   email: FormControl,
@@ -39,10 +40,27 @@ export class LoginComponent {
     })
   }
 
+  ngOnInit(): void {
+    const token = sessionStorage.getItem('auth-token');
+
+    if (token && !isTokenExpired(token)) {
+      this.router.navigate(['/home']);
+    }
+  }
+
   submit(){
     this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
-      next: () => this.toastService.success("Login successful!"),
-      error: () => this.toastService.error("Unexpected error! Please try again later")
+      next: () => this.router.navigate(["home"]),
+      error: (err) => {
+        if (err?.error?.errors) {
+          err.error?.errors?.map((arr: any) => {
+            this.toastService.error(arr.errors[0]);
+          });
+        } else {
+          const errorMsg = err?.error?.message || "Unexpected error! Please try again later.";
+          this.toastService.error(errorMsg);
+        }
+      }
     })
   }
 
