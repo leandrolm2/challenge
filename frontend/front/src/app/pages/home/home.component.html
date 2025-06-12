@@ -1,0 +1,44 @@
+<h1>Task List</h1>
+
+<mat-button-toggle-group [(ngModel)]="taskFilter" aria-label="Task filter" class="filter-toggle" exclusive>
+  <mat-button-toggle value="all">Todas</mat-button-toggle>
+  <mat-button-toggle value="completed">Completas</mat-button-toggle>
+  <mat-button-toggle value="incomplete">Incompletas</mat-button-toggle>
+</mat-button-toggle-group>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
+
+<div>
+  <input [(ngModel)]="newTitle" placeholder="Title" />
+  <input [(ngModel)]="newDescription" placeholder="Description" />
+  <button (click)="addTask()" [disabled]="isLoading">
+    {{ isLoading ? 'Adding...' : 'Add' }}
+  </button>
+</div>
+
+<ul>
+<li *ngFor="let task of filteredTasks()" [class.completed]="task.completed">
+  <div class="task-checkbox">
+    <input
+      type="checkbox"
+      [checked]="task.completed"
+      (change)="onToggleAttempt(task)"
+    />
+  </div>
+
+  <span *ngIf="!task.editing">
+    <strong>{{ task.title }}</strong> - <span>{{ task.description }}</span><br />
+    <small><em>Created at: {{ formatDate(task.createdAt) }}</em></small><br />
+    <button (click)="editTask(task)">Edit</button>
+    <button (click)="deleteTask(task.id)">Delete</button>
+  </span>
+
+  <span *ngIf="task.editing">
+    <input [(ngModel)]="task.title" />
+    <input [(ngModel)]="task.description" />
+    <button (click)="updateTask(task)">Save</button>
+  </span>
+</li>
+</ul>
